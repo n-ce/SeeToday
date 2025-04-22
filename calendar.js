@@ -32,9 +32,14 @@ export function getCalendarDates(year, month, weekStartsOn = 0) {
   return calendar;
 }
 
-export function getCalendarDataForCurrentMonth(weekStartsOn = 1) {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  return getCalendarDates(year, month, weekStartsOn);
+export const getMonthFromNumber = (number) => [
+  'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+][number];
+
+export function formatDate(date) {
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const month = getMonthFromNumber(date.getMonth());
+  return `${day} ${month} ${year}`;
 }
+

@@ -148,6 +148,23 @@ table {
 
   td {
     font-weight: bold;
+
+    &.inactive {
+      opacity: 0.5;
+      font-weight: normal;
+    }
+
+    &.active {
+      background: var(--onbg);
+      border-radius: 1rem;
+      border-bottom-right-radius: 0.5rem;
+      border: dotted 1px var(--text);
+    }
+
+    &.logged:after {
+      content: '👁️';
+
+    }
   }
 
   th,
