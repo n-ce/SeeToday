@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f499a5">
+  <title>See Today</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main>
+    <section id="calendar">
+      <header>
+        <button></button>
+        <button></button>
+        <button></button>
+      </header>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+    </section>
+
+    <section id="day" class="hide">
+      <header>
+        <button></button>
+        <h2></h2>
+      </header>
+      <textarea
+        placeholder="Enter your active focus activities of the day, auto-save and auto-remove are enabled."></textarea>
+    </section>
+
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+  <script>eruda.init();</script>
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>
