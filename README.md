@@ -1,6 +1,6 @@
 # See Today 🤓
 
-version : beta
+`Version RC1`
 
 See Today is an active focus diary application designed to support individuals interested in improving their vision habits. While inspired by the principles and concepts promoted by the endmyopia initiative, it's important to note that See Today is an independent project and is not officially affiliated with endmyopia.
 

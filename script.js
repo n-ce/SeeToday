@@ -3,6 +3,7 @@ import { formatDate, getCalendarDates, getMonthFromNumber } from './calendar.js'
 const date = new Date();
 let year = date.getFullYear();
 let month = date.getMonth();
+let weekStart = 1;
 
 const [prevBtn, monthBtn, nextBtn] = document.querySelectorAll('header button');
 const tbody = document.querySelector('tbody');
@@ -10,11 +11,25 @@ const dayContainer = document.getElementById('day');
 const [dayHeader, dayNote] = dayContainer.children;
 const [dayBack, dayTitle] = dayHeader.children;
 
-function toggleCalendar() {
-  dayContainer.classList.toggle('hide');
-}
 
-dayBack.addEventListener('click', toggleCalendar);
+dayBack.addEventListener('click', () => {
+
+  const db = getDB();
+  const ctx = dayTitle.textContent;
+  const d = document.querySelector(`[data-date="${ctx}"]`);
+  if (dayNote.value) {
+    db[ctx] = dayNote.value;
+    if (!d.classList.contains('logged'))
+      d.classList.add('logged');
+  }
+  else {
+    delete db[ctx];
+    if (d.classList.contains('logged'))
+      d.classList.remove('logged');
+  }
+  localStorage.setItem('db', JSON.stringify(db));
+  dayContainer.classList.toggle('hide');
+});
 
 prevBtn.addEventListener('click', () => {
   if (month === 0) {
@@ -22,7 +37,7 @@ prevBtn.addEventListener('click', () => {
     month = 12;
   }
   month--;
-  renderer(getCalendarDates(year, month, 1));
+  renderer(getCalendarDates(year, month, weekStart));
 })
 nextBtn.addEventListener('click', () => {
   if (month === 11) {
@@ -30,13 +45,16 @@ nextBtn.addEventListener('click', () => {
     month = -1;
   }
   month++;
-  renderer(getCalendarDates(year, month, 1));
+  renderer(getCalendarDates(year, month, weekStart));
 })
 
 monthBtn.addEventListener('click', () => {
-  console.log(true);
+  weekStart--;
+  if (weekStart === 7)
+    weekStart = 0;
+  console.log(weekStart);
+  renderer(getCalendarDates(year, month, weekStart));
 })
-
 
 
 
@@ -47,7 +65,7 @@ function renderer(seed) {
 
   monthBtn.textContent = getMonthFromNumber(month).toUpperCase();
 
-  seed.forEach((dt, index) => {
+  seed.forEach((dt) => {
     const mth = dt.getMonth();
     const dayOfWeek = dt.getDay();
     const displayDay = dt.getDate();
@@ -63,15 +81,21 @@ function renderer(seed) {
     if (mth === date.getMonth() && displayDay === date.getDate())
       td.className = 'active';
 
+    const title = formatDate(dt);
+
+    if (title in getDB())
+      td.classList.add('logged');
+
+    td.dataset.date = title;
+
     td.addEventListener('click', () => {
-      toggleCalendar();
-      const title = formatDate(dt);
+      dayContainer.classList.toggle('hide');
       dayTitle.textContent = title;
       const db = getDB();
       if (title in db)
-        dayNote.textContent = db[title];
+        dayNote.value = db[title];
       else
-        dayNote.textContent = '';
+        dayNote.value = '';
     });
     tbody.lastElementChild.appendChild(td);
   });
@@ -80,7 +104,7 @@ function renderer(seed) {
 
 
 renderer(
-  getCalendarDates(year, month, 1)
+  getCalendarDates(year, month, weekStart)
 );
 
 function getDB() {
@@ -90,12 +114,3 @@ function getDB() {
 
 }
 
-dayNote.addEventListener('input', () => {
-  const db = getDB();
-  if (dayNote.value)
-    db[dayTitle.textContent] = dayNote.value;
-  else
-    delete db[dayTitle.textContent];
-  localStorage.setItem('db', JSON.stringify(db));
-
-})
